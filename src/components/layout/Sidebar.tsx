@@ -53,7 +53,7 @@ export function Sidebar() {
         )}
       </div>
 
-      <nav className='flex-1 space-y-0.5 p-3'>
+      <nav className='flex-1 space-y-0.5 px-3 pt-3'>
         {navItems.map((item) => {
           const active = isNavItemActive(location.pathname, item.path);
           return (
@@ -70,9 +70,9 @@ export function Sidebar() {
         })}
       </nav>
 
-      <div
-        className={`space-y-0.5 border-t border-slate-200 p-3 dark:border-[#2d3540] ${isCollapsed ? 'text-center' : ''}`}
-      >
+      {/* Sits on the nav side of the divider: it is a destination, unlike the
+          collapse control below, which is chrome. */}
+      <div className='space-y-0.5 px-3 pb-3'>
         {footerNavItems.map((item) => (
           <SidebarNavLink
             key={item.path}
@@ -84,7 +84,11 @@ export function Sidebar() {
             collapsed={isCollapsed}
           />
         ))}
+      </div>
 
+      <div
+        className={`border-t border-slate-200 p-3 dark:border-[#2d3540] ${isCollapsed ? 'text-center' : ''}`}
+      >
         <button
           type='button'
           onClick={toggleSidebar}

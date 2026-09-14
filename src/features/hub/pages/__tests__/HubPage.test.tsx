@@ -70,6 +70,13 @@ describe('HubPage', () => {
     expect(html).toContain(COLLABORATIVE_CENTRE.name);
   });
 
+  it('says what the organisation does and what the Hub is for', () => {
+    const html = renderHub();
+    expect(html).toContain(ORG.purpose);
+    expect(html).toContain(COLLABORATIVE_CENTRE.partnership);
+    expect(html).toContain('This Hub is the way in');
+  });
+
   it('opens external destinations safely in a new tab', () => {
     const html = renderHub();
     expect(html).toContain('rel="noopener noreferrer"');

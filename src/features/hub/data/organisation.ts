@@ -39,12 +39,19 @@ export const COLLABORATIVE_CENTRE_LINK: OrgLink = {
 /** The two public sites that introduce the organisation. */
 export const ORG_LINKS: OrgLink[] = [UMCCR_LINK, COLLABORATIVE_CENTRE_LINK];
 
+/**
+ * The mission as a verb phrase, so prose can compose it ("UMCCR works to …")
+ * without a second near-identical copy drifting out of sync with `ORG.mission`.
+ */
+const PURPOSE =
+  'improve cancer patient outcome through genome discovery, translation and personalised medicine';
+
 export const ORG = {
   shortName: 'UMCCR',
   name: 'University of Melbourne Centre for Cancer Research',
+  purpose: PURPOSE,
   /** Mission statement, as published on umccr.org. */
-  mission:
-    'To improve cancer patient outcome through genome discovery, translation and personalised medicine.',
+  mission: `To ${PURPOSE}.`,
   /** Two-sentence intro used at the top of the Hub. */
   summary:
     'UMCCR brings cancer genomics, computational oncology and clinical research together in the Victorian Comprehensive Cancer Centre, in the Melbourne Biomedical Precinct. Its Genomics Platform Group develops, tests and applies accredited bioinformatics workflows to patient data and large-scale research projects — the pipelines and data that most of the tools in this Hub are built around.',
@@ -57,6 +64,8 @@ export const ORG = {
 
 export const COLLABORATIVE_CENTRE = {
   name: 'Collaborative Centre for Genomic Cancer Medicine',
+  /** How the partnership is described in one clause, for inline prose. */
+  partnership: 'a University of Melbourne and Peter MacCallum Cancer Centre joint venture',
   summary:
     'A joint venture between the University of Melbourne and Peter MacCallum Cancer Centre, bringing leaders in cancer care and genomic research into one interdisciplinary centre in the Melbourne Biomedical Precinct.',
   scope:

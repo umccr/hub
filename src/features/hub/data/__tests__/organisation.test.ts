@@ -41,6 +41,17 @@ describe('organisation copy', () => {
     expect(ORG.shortName).toBe('UMCCR');
   });
 
+  it('derives the mission sentence from the purpose phrase, so the two cannot drift', () => {
+    expect(ORG.mission).toBe(`To ${ORG.purpose}.`);
+    expect(ORG.purpose).not.toMatch(/^To /);
+    expect(ORG.purpose).not.toMatch(/\.$/);
+  });
+
+  it('names both institutions behind the partner centre', () => {
+    expect(COLLABORATIVE_CENTRE.partnership).toContain('University of Melbourne');
+    expect(COLLABORATIVE_CENTRE.partnership).toContain('Peter MacCallum');
+  });
+
   it('carries a mission, a summary and supporting facts', () => {
     expect(ORG.mission.length).toBeGreaterThan(0);
     expect(ORG.summary.length).toBeGreaterThan(0);
