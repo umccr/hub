@@ -1,11 +1,13 @@
 import { useLocation } from 'react-router';
 import {
+  Boxes,
   CircleQuestionMark,
   LayoutGrid,
   PanelLeftClose,
   PanelLeftOpen,
   type LucideIcon,
 } from 'lucide-react';
+import { CATALOG_SECTIONS } from '@/features/hub/data/catalog';
 import { SidebarNavLink } from './SidebarNavLink';
 import { useAppShell } from '../../context/app-shell-context';
 
@@ -16,7 +18,14 @@ interface PrimaryNavItem {
   sublabel?: string;
 }
 
-const navItems: PrimaryNavItem[] = [{ path: '/', label: 'Hub', icon: LayoutGrid }];
+const navItems: PrimaryNavItem[] = [{ path: '/', label: 'Overview', icon: LayoutGrid }];
+
+// Derived from the catalogue so a new platform section needs no sidebar edit.
+const sectionNavItems: PrimaryNavItem[] = CATALOG_SECTIONS.map((section) => ({
+  path: section.path,
+  label: section.label,
+  icon: Boxes,
+}));
 
 // Sits above the collapse control rather than in the main nav: it is reference
 // material about the organisation, not somewhere you work.
@@ -53,21 +62,41 @@ export function Sidebar() {
         )}
       </div>
 
-      <nav className='flex-1 space-y-0.5 px-3 pt-3'>
-        {navItems.map((item) => {
-          const active = isNavItemActive(location.pathname, item.path);
-          return (
+      <nav className='flex-1 px-3 pt-3'>
+        <div className='space-y-0.5'>
+          {navItems.map((item) => (
             <SidebarNavLink
               key={item.path}
               to={item.path}
               label={item.label}
               sublabel={item.sublabel}
               icon={item.icon}
-              active={active}
+              active={isNavItemActive(location.pathname, item.path)}
               collapsed={isCollapsed}
             />
-          );
-        })}
+          ))}
+        </div>
+
+        <section className={isCollapsed ? 'mt-4' : 'mt-5'} aria-label='Sections'>
+          {!isCollapsed && (
+            <h5 className='text-caption mb-1 px-2.5 font-semibold tracking-[0.08em] text-slate-400 uppercase dark:text-[#9dabb9]/70'>
+              Sections
+            </h5>
+          )}
+          <div className='space-y-0.5'>
+            {sectionNavItems.map((item) => (
+              <SidebarNavLink
+                key={item.path}
+                to={item.path}
+                label={item.label}
+                sublabel={item.sublabel}
+                icon={item.icon}
+                active={isNavItemActive(location.pathname, item.path)}
+                collapsed={isCollapsed}
+              />
+            ))}
+          </div>
+        </section>
       </nav>
 
       {/* Sits on the nav side of the divider: it is a destination, unlike the

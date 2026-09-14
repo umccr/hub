@@ -5,10 +5,16 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import authRoutes from '@/features/auth/routes';
 import { RouteErrorFallbackPage } from '@/features/errors/pages/RouteErrorFallbackPage';
 
+import { CATALOG_SECTIONS } from '@/features/hub/data/catalog';
+
 import routeRegistry from './route-registry';
 
 const HubPage = lazy(() =>
   import('@/features/hub/pages/HubPage').then((m) => ({ default: m.HubPage }))
+);
+
+const SectionPage = lazy(() =>
+  import('@/features/hub/pages/SectionPage').then((m) => ({ default: m.SectionPage }))
 );
 
 const AboutPage = lazy(() =>
@@ -35,8 +41,13 @@ export const router = createBrowserRouter(
             {
               index: true,
               Component: HubPage,
-              errorElement: createElement(RouteErrorFallbackPage, { featureName: 'Hub' }),
+              errorElement: createElement(RouteErrorFallbackPage, { featureName: 'Overview' }),
             },
+            ...CATALOG_SECTIONS.map((section) => ({
+              path: section.path.replace(/^\//, ''),
+              element: createElement(SectionPage, { section: section.section }),
+              errorElement: createElement(RouteErrorFallbackPage, { featureName: section.label }),
+            })),
             {
               path: 'about',
               Component: AboutPage,

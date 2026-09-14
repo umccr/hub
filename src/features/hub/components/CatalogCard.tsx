@@ -2,17 +2,25 @@ import { ArrowUpRight } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { PillTag } from '@/components/ui/PillTag';
 import { ENV_BADGE_STYLES } from '@/components/ui/env-badge';
-import type { CatalogEntry } from '../data/catalog';
+import { useEnvironment } from '@/context/environment-context';
+import { resolveCatalogEnv, resolveCatalogUrl, type CatalogEntry } from '../data/catalog';
 
 /**
  * One entry in the Hub catalogue. Every destination is a separate application,
  * so these always open in a new tab and always say so — the arrow is the
- * affordance, `local` is the warning.
+ * affordance, `local` and the environment tag are the warnings.
+ *
+ * The URL is resolved here rather than in the data, so a card always points at
+ * the deployment the Hub itself is running against.
  */
 export function CatalogCard({ entry }: { entry: CatalogEntry }) {
+  const { environment } = useEnvironment();
+  const url = resolveCatalogUrl(entry.url, environment);
+  const env = resolveCatalogEnv(url);
+
   return (
     <a
-      href={entry.url}
+      href={url}
       target='_blank'
       rel='noopener noreferrer'
       className='group focus-visible:ring-ring/40 block rounded-xl focus-visible:ring-2 focus-visible:outline-none'
@@ -37,14 +45,14 @@ export function CatalogCard({ entry }: { entry: CatalogEntry }) {
               />
             </div>
 
-            {(entry.local || entry.env) && (
+            {(entry.local || env) && (
               <div className='mt-1.5 flex flex-wrap items-center gap-1.5'>
                 {entry.local && <PillTag variant='amber'>Local</PillTag>}
-                {entry.env && (
+                {env && (
                   <span
-                    className={`text-caption rounded-full px-2 py-0.5 font-semibold tracking-wider uppercase ${ENV_BADGE_STYLES[entry.env]}`}
+                    className={`text-caption rounded-full px-2 py-0.5 font-semibold tracking-wider uppercase ${ENV_BADGE_STYLES[env]}`}
                   >
-                    {entry.env}
+                    {env}
                   </span>
                 )}
               </div>

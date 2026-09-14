@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 import type { ReactNode } from 'react';
 import { Sidebar } from '../Sidebar';
 import { AppShellContext, type AppShellContextValue } from '../../../context/app-shell-context';
+import { CATALOG_SECTIONS } from '@/features/hub/data/catalog';
 
 function render(collapsed = false) {
   const value = {
@@ -35,9 +36,28 @@ describe('Sidebar', () => {
     expect(dividerAt).toBeLessThan(collapseAt);
   });
 
-  it('keeps Hub above About us', () => {
+  it('orders Overview, then the platform sections, then About us', () => {
     const markup = render();
-    expect(markup.indexOf('href="/"')).toBeLessThan(markup.indexOf('href="/about"'));
+    const at = (href: string) => markup.indexOf(`href="${href}"`);
+
+    expect(at('/')).toBeLessThan(at('/orcabus'));
+    expect(at('/orcabus')).toBeLessThan(at('/orcahouse'));
+    expect(at('/orcahouse')).toBeLessThan(at('/about'));
+  });
+
+  it('groups the platform sections under a Sections label', () => {
+    const markup = render();
+    expect(markup).toContain('Sections');
+    for (const section of CATALOG_SECTIONS) {
+      expect(markup).toContain(`href="${section.path}"`);
+      expect(markup).toContain(section.label);
+    }
+  });
+
+  it('drops the group label when collapsed, keeping the links', () => {
+    const markup = render(true);
+    expect(markup).not.toContain('>Sections<');
+    expect(markup).toContain('href="/orcabus"');
   });
 
   it('marks Hub as the current page at the index route', () => {

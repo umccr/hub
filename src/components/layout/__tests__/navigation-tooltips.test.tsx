@@ -61,7 +61,7 @@ describe('collapsed navigation tooltips', () => {
     expect(markup).toContain('data-slot="tooltip-content"');
     expect(markup).toContain('data-side="right"');
     expect(markup).toContain('data-show-arrow="false"');
-    expect(markup).toContain('>Hub</span>');
+    expect(markup).toContain('>Overview</span>');
     expect(markup).toContain('>About us</span>');
   });
 
