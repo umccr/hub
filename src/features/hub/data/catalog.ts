@@ -1,4 +1,12 @@
-import { AppWindow, FolderGit2, Globe, Wrench, type LucideIcon } from 'lucide-react';
+import {
+  AppWindow,
+  BookOpen,
+  Braces,
+  FolderGit2,
+  Globe,
+  Wrench,
+  type LucideIcon,
+} from 'lucide-react';
 
 /**
  * What the Hub catalogues. The four kinds are deliberately coarse — they answer
@@ -6,10 +14,12 @@ import { AppWindow, FolderGit2, Globe, Wrench, type LucideIcon } from 'lucide-re
  *
  *  - `app`     a console you work in (sign in, read and change data)
  *  - `tool`    a single-purpose utility you run and leave
- *  - `project` a codebase or its documentation
+ *  - `project` a source repository
+ *  - `docs`    written documentation you read
+ *  - `api`     a service's OpenAPI/Swagger reference
  *  - `web`     an organisation-facing site
  */
-export type CatalogKind = 'app' | 'tool' | 'project' | 'web';
+export type CatalogKind = 'app' | 'tool' | 'project' | 'docs' | 'api' | 'web';
 
 export interface CatalogEntry {
   id: string;
@@ -24,6 +34,9 @@ export interface CatalogEntry {
   /** Points at a dev server rather than a deployed host — flagged in the UI so
    *  nobody files a bug when it fails to load from another machine. */
   local?: boolean;
+  /** Which deployment this points at. Shown on the tile because the catalogue
+   *  mixes dev and prod hosts, and the URL alone is easy to misread. */
+  env?: 'dev' | 'prod';
 }
 
 export const CATALOG_KINDS: {
@@ -52,8 +65,22 @@ export const CATALOG_KINDS: {
     kind: 'project',
     label: 'Project',
     heading: 'Projects',
-    blurb: 'Codebases and their documentation.',
+    blurb: 'Source repositories and the tools that browse them.',
     icon: FolderGit2,
+  },
+  {
+    kind: 'docs',
+    label: 'Docs',
+    heading: 'Docs',
+    blurb: 'Written documentation for the platform and its data.',
+    icon: BookOpen,
+  },
+  {
+    kind: 'api',
+    label: 'API',
+    heading: 'API references',
+    blurb: 'OpenAPI schemas and Swagger UI for the microservices.',
+    icon: Braces,
   },
   {
     kind: 'web',
@@ -98,17 +125,6 @@ export const CATALOG: CatalogEntry[] = [
     accent: 'bg-rose-500',
     local: true,
   },
-  {
-    id: 'github-dashboard',
-    name: 'GitHub Dashboard',
-    description: 'Dashboard for managing and monitoring the organisation’s repositories.',
-    kind: 'app',
-    url: 'http://localhost:5173/',
-    initials: 'GH',
-    accent: 'bg-slate-800',
-    local: true,
-  },
-
   // --- Tools ----------------------------------------------------------------
   {
     id: 'deployment-pulse',
@@ -131,13 +147,14 @@ export const CATALOG: CatalogEntry[] = [
 
   // --- Projects -------------------------------------------------------------
   {
-    id: 'guardians-docs',
-    name: 'Guardians Docs',
-    description: 'Documentation for the Guardians project.',
+    id: 'github-explorer',
+    name: 'GitHub Explorer',
+    description: 'Browse and monitor the organisation’s repositories.',
     kind: 'project',
-    url: 'https://umccr.github.io/guardians-doc/',
-    initials: 'GD',
-    accent: 'bg-purple-600',
+    url: 'http://localhost:5173/',
+    initials: 'GX',
+    accent: 'bg-slate-800',
+    local: true,
   },
   {
     id: 'github-org',
@@ -147,6 +164,107 @@ export const CATALOG: CatalogEntry[] = [
     url: 'https://github.com/umccr',
     initials: 'GT',
     accent: 'bg-slate-700',
+  },
+
+  // --- Docs -----------------------------------------------------------------
+  {
+    id: 'guardians-docs',
+    name: 'Guardians',
+    description: 'Documentation for the Guardians project.',
+    kind: 'docs',
+    url: 'https://umccr.github.io/guardians-doc/',
+    initials: 'GD',
+    accent: 'bg-purple-600',
+  },
+  {
+    id: 'orcahouse-dbt-docs',
+    name: 'OrcaHouse dbt',
+    description: 'dbt project docs for the OrcaHouse warehouse — models, sources and lineage.',
+    kind: 'docs',
+    url: 'https://umccr.github.io/orcahouse-doc/dbt/',
+    initials: 'DB',
+    accent: 'bg-orange-600',
+  },
+  {
+    id: 'orcavault-docs',
+    name: 'OrcaVault',
+    description: 'dbt documentation for the OrcaVault models.',
+    kind: 'docs',
+    url: 'https://umccr.github.io/orcahouse-doc/dbt/orcavault/#!/overview',
+    initials: 'OV',
+    accent: 'bg-orange-500',
+  },
+
+  // --- API references -------------------------------------------------------
+  {
+    id: 'api-metadata',
+    name: 'Metadata API',
+    description: 'Subjects, samples, libraries and projects — the lab metadata service.',
+    kind: 'api',
+    url: 'https://metadata.dev.umccr.org/schema/swagger-ui/#/',
+    initials: 'MD',
+    accent: 'bg-blue-600',
+    env: 'dev',
+  },
+  {
+    id: 'api-sequence',
+    name: 'Sequence API',
+    description: 'Sequencing runs and their state.',
+    kind: 'api',
+    url: 'https://sequence.dev.umccr.org/schema/swagger-ui/#/',
+    initials: 'SQ',
+    accent: 'bg-blue-500',
+    env: 'dev',
+  },
+  {
+    id: 'api-workflow',
+    name: 'Workflow API',
+    description: 'Workflow runs, analyses and execution state.',
+    kind: 'api',
+    url: 'https://workflow.dev.umccr.org/schema/swagger-ui/#/',
+    initials: 'WF',
+    accent: 'bg-indigo-500',
+    env: 'dev',
+  },
+  {
+    id: 'api-file',
+    name: 'File API',
+    description: 'Stored objects and their locations.',
+    kind: 'api',
+    url: 'https://file.dev.umccr.org/schema/swagger-ui/#/',
+    initials: 'FL',
+    accent: 'bg-teal-600',
+    env: 'dev',
+  },
+  {
+    id: 'api-fastq',
+    name: 'Fastq API',
+    description: 'FASTQ sets and read-level records.',
+    kind: 'api',
+    url: 'https://fastq.dev.umccr.org/schema/swagger-ui#/',
+    initials: 'FQ',
+    accent: 'bg-teal-500',
+    env: 'dev',
+  },
+  {
+    id: 'api-case',
+    name: 'Case API',
+    description: 'Cases tying lab, run and workflow data together.',
+    kind: 'api',
+    url: 'https://case.dev.umccr.org/schema/swagger-ui/#/',
+    initials: 'CS',
+    accent: 'bg-violet-600',
+    env: 'dev',
+  },
+  {
+    id: 'api-deploy-status',
+    name: 'Deploy Status API',
+    description: 'Deployment state behind Deployment Pulse.',
+    kind: 'api',
+    url: 'https://deploy-status.prod.umccr.org/schema/swagger-ui#/',
+    initials: 'DS',
+    accent: 'bg-emerald-600',
+    env: 'prod',
   },
 
   // --- Organisation ---------------------------------------------------------

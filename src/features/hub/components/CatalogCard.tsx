@@ -1,6 +1,7 @@
 import { ArrowUpRight } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { PillTag } from '@/components/ui/PillTag';
+import { ENV_BADGE_STYLES } from '@/components/ui/env-badge';
 import type { CatalogEntry } from '../data/catalog';
 
 /**
@@ -36,9 +37,16 @@ export function CatalogCard({ entry }: { entry: CatalogEntry }) {
               />
             </div>
 
-            {entry.local && (
-              <div className='mt-1.5'>
-                <PillTag variant='amber'>Local</PillTag>
+            {(entry.local || entry.env) && (
+              <div className='mt-1.5 flex flex-wrap items-center gap-1.5'>
+                {entry.local && <PillTag variant='amber'>Local</PillTag>}
+                {entry.env && (
+                  <span
+                    className={`text-caption rounded-full px-2 py-0.5 font-semibold tracking-wider uppercase ${ENV_BADGE_STYLES[entry.env]}`}
+                  >
+                    {entry.env}
+                  </span>
+                )}
               </div>
             )}
           </div>

@@ -1,24 +1,13 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { ExternalLink } from 'lucide-react';
-import {
-  useEnvironment,
-  type AppEnvironment,
-  type DeployedEnvironment,
-} from '@/context/environment-context';
+import { useEnvironment, type DeployedEnvironment } from '@/context/environment-context';
 import {
   DEPLOYED_ENVIRONMENTS,
   ENVIRONMENT_HOSTNAMES,
   buildEnvironmentUrl,
   getEnvironmentLabel,
 } from '@/context/environment-resolver';
-
-const ENV_BADGE_STYLES: Record<AppEnvironment, string> = {
-  local:
-    'border border-violet-200 bg-violet-100 text-violet-700 dark:border-violet-900/30 dark:bg-violet-500/10 dark:text-violet-400',
-  dev: 'border border-blue-200 bg-blue-100 text-blue-700 dark:border-blue-900/30 dark:bg-blue-500/10 dark:text-blue-400',
-  stg: 'border border-amber-200 bg-amber-100 text-amber-700 dark:border-amber-900/30 dark:bg-amber-500/10 dark:text-amber-500',
-  prod: 'border border-emerald-200 bg-emerald-100 text-emerald-700 dark:border-emerald-900/30 dark:bg-emerald-500/10 dark:text-emerald-400',
-};
+import { ENV_BADGE_STYLES } from '@/components/ui/env-badge';
 
 const ENV_DOT_STYLES: Record<DeployedEnvironment, string> = {
   dev: 'bg-blue-500',

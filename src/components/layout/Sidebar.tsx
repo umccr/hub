@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router';
 import {
-  Building2,
+  CircleQuestionMark,
   LayoutGrid,
   PanelLeftClose,
   PanelLeftOpen,
@@ -16,9 +16,12 @@ interface PrimaryNavItem {
   sublabel?: string;
 }
 
-const navItems: PrimaryNavItem[] = [
-  { path: '/', label: 'Hub', icon: LayoutGrid },
-  { path: '/about', label: 'Organisation', icon: Building2 },
+const navItems: PrimaryNavItem[] = [{ path: '/', label: 'Hub', icon: LayoutGrid }];
+
+// Sits above the collapse control rather than in the main nav: it is reference
+// material about the organisation, not somewhere you work.
+const footerNavItems: PrimaryNavItem[] = [
+  { path: '/about', label: 'About us', icon: CircleQuestionMark },
 ];
 
 function isNavItemActive(pathname: string, path: string) {
@@ -68,8 +71,20 @@ export function Sidebar() {
       </nav>
 
       <div
-        className={`border-t border-slate-200 p-3 dark:border-[#2d3540] ${isCollapsed ? 'text-center' : ''}`}
+        className={`space-y-0.5 border-t border-slate-200 p-3 dark:border-[#2d3540] ${isCollapsed ? 'text-center' : ''}`}
       >
+        {footerNavItems.map((item) => (
+          <SidebarNavLink
+            key={item.path}
+            to={item.path}
+            label={item.label}
+            sublabel={item.sublabel}
+            icon={item.icon}
+            active={isNavItemActive(location.pathname, item.path)}
+            collapsed={isCollapsed}
+          />
+        ))}
+
         <button
           type='button'
           onClick={toggleSidebar}

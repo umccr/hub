@@ -111,3 +111,56 @@ describe('CATALOG', () => {
     }
   });
 });
+
+describe('catalogue sections', () => {
+  const byKind = (kind: string) => CATALOG.filter((e) => e.kind === kind);
+
+  it('lists every documentation site', () => {
+    expect(byKind('docs').map((e) => e.url)).toEqual([
+      'https://umccr.github.io/guardians-doc/',
+      'https://umccr.github.io/orcahouse-doc/dbt/',
+      'https://umccr.github.io/orcahouse-doc/dbt/orcavault/#!/overview',
+    ]);
+  });
+
+  it('lists every service API reference', () => {
+    expect(
+      byKind('api')
+        .map((e) => e.url)
+        .sort()
+    ).toEqual([
+      'https://case.dev.umccr.org/schema/swagger-ui/#/',
+      'https://deploy-status.prod.umccr.org/schema/swagger-ui#/',
+      'https://fastq.dev.umccr.org/schema/swagger-ui#/',
+      'https://file.dev.umccr.org/schema/swagger-ui/#/',
+      'https://metadata.dev.umccr.org/schema/swagger-ui/#/',
+      'https://sequence.dev.umccr.org/schema/swagger-ui/#/',
+      'https://workflow.dev.umccr.org/schema/swagger-ui/#/',
+    ]);
+  });
+
+  it('tags every API reference with the deployment it points at', () => {
+    for (const entry of byKind('api')) {
+      expect(entry.env).toBeDefined();
+    }
+  });
+
+  it('derives that tag from the host, so the label cannot contradict the url', () => {
+    for (const entry of CATALOG) {
+      if (!entry.env) continue;
+      expect(new URL(entry.url).hostname).toContain(`.${entry.env}.`);
+    }
+  });
+
+  it('files GitHub Explorer under projects', () => {
+    const gh = CATALOG.find((e) => e.id === 'github-explorer');
+    expect(gh?.name).toBe('GitHub Explorer');
+    expect(gh?.kind).toBe('project');
+  });
+
+  it('gives every declared section at least one entry', () => {
+    for (const { kind } of CATALOG_KINDS) {
+      expect(byKind(kind).length).toBeGreaterThan(0);
+    }
+  });
+});

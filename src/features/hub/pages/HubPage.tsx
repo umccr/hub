@@ -1,14 +1,31 @@
-import { useMemo, useState } from 'react';
-import { Link } from 'react-router';
-import { ArrowRight, LayoutGrid, Search } from 'lucide-react';
+import { useMemo, useState, type ReactNode } from 'react';
+import { LayoutGrid, Search } from 'lucide-react';
 import { useAuthContext } from '@/context/auth-context';
 import { useAppShellHeader } from '@/context/app-shell-context';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { CATALOG_KINDS, groupCatalog, type CatalogFilter } from '../data/catalog';
-import { ORG, ORG_LINKS } from '../data/organisation';
+import {
+  COLLABORATIVE_CENTRE,
+  COLLABORATIVE_CENTRE_LINK,
+  ORG,
+  UMCCR_LINK,
+  type OrgLink,
+} from '../data/organisation';
 import { CatalogCard } from '../components/CatalogCard';
-import { OrgLinkCard } from '../components/OrgLinkCard';
+
+function OrgAnchor({ link, children }: { link: OrgLink; children: ReactNode }) {
+  return (
+    <a
+      href={link.url}
+      target='_blank'
+      rel='noopener noreferrer'
+      className='focus-visible:ring-ring/40 rounded-xs font-medium text-blue-600 underline underline-offset-2 hover:text-blue-700 focus-visible:ring-2 focus-visible:outline-none dark:text-blue-400 dark:hover:text-blue-300'
+    >
+      {children}
+    </a>
+  );
+}
 
 export function HubPage() {
   const { user } = useAuthContext();
@@ -37,46 +54,19 @@ export function HubPage() {
 
   return (
     <div className='px-6 py-6'>
-      {/* Welcome + what this place is */}
+      {/* Welcome. The organisation links live inline here rather than in a panel
+          of their own — they are context for the catalogue, not a section of it. */}
       <header className='mb-6'>
         <h2 className='text-lg font-semibold text-slate-900 dark:text-white'>
           Welcome{user?.name ? `, ${user.name}` : ''}
         </h2>
         <p className='text-muted-foreground mt-1 max-w-3xl text-sm leading-relaxed'>
-          One place for the apps, tools, projects and sites used across {ORG.shortName} — the{' '}
-          {ORG.name}. Everything below opens in its own tab; contact your administrator if you are
-          missing access to something you need.
+          Apps, tools, docs and APIs across {ORG.shortName} — the{' '}
+          <OrgAnchor link={UMCCR_LINK}>{ORG.name}</OrgAnchor> — and the{' '}
+          <OrgAnchor link={COLLABORATIVE_CENTRE_LINK}>{COLLABORATIVE_CENTRE.name}</OrgAnchor>.
+          Everything opens in a new tab.
         </p>
       </header>
-
-      {/* Organisation strip — the "overview centre" half of the Hub */}
-      <section
-        aria-labelledby='org-heading'
-        className='mb-8 rounded-xl border border-slate-200 bg-white p-5 dark:border-[#2d3540] dark:bg-[#111418]'
-      >
-        <div className='flex flex-wrap items-start justify-between gap-3'>
-          <div className='min-w-0'>
-            <h3 id='org-heading' className='text-sm font-semibold text-slate-900 dark:text-white'>
-              About {ORG.shortName}
-            </h3>
-            <p className='text-muted-foreground mt-1 max-w-2xl text-xs leading-relaxed'>
-              {ORG.mission}
-            </p>
-          </div>
-          <Button asChild variant='outline' size='sm'>
-            <Link to='/about'>
-              Organisation overview
-              <ArrowRight className='h-4 w-4' />
-            </Link>
-          </Button>
-        </div>
-
-        <div className='mt-4 grid gap-3 sm:grid-cols-2'>
-          {ORG_LINKS.map((link) => (
-            <OrgLinkCard key={link.id} link={link} />
-          ))}
-        </div>
-      </section>
 
       {/* Catalogue controls */}
       <div className='mb-5 flex flex-wrap items-center gap-3'>

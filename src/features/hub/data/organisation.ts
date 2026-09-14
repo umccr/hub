@@ -18,25 +18,26 @@ export interface OrgLink {
   host: string;
 }
 
+export const UMCCR_LINK: OrgLink = {
+  id: 'umccr-about',
+  label: 'About UMCCR',
+  description:
+    'Who we are, the research groups, and how the Centre is organised at the University of Melbourne.',
+  url: 'https://umccr.org/about/',
+  host: 'umccr.org',
+};
+
+export const COLLABORATIVE_CENTRE_LINK: OrgLink = {
+  id: 'collaborative-centre',
+  label: 'Collaborative Centre for Genomic Cancer Medicine',
+  description:
+    'The joint University of Melbourne and Peter MacCallum Cancer Centre venture our work sits within.',
+  url: 'https://genomic-cancer-medicine.unimelb.edu.au/',
+  host: 'genomic-cancer-medicine.unimelb.edu.au',
+};
+
 /** The two public sites that introduce the organisation. */
-export const ORG_LINKS: OrgLink[] = [
-  {
-    id: 'umccr-about',
-    label: 'About UMCCR',
-    description:
-      'Who we are, the research groups, and how the Centre is organised at the University of Melbourne.',
-    url: 'https://umccr.org/about/',
-    host: 'umccr.org',
-  },
-  {
-    id: 'collaborative-centre',
-    label: 'Collaborative Centre for Genomic Cancer Medicine',
-    description:
-      'The joint University of Melbourne and Peter MacCallum Cancer Centre venture our work sits within.',
-    url: 'https://genomic-cancer-medicine.unimelb.edu.au/',
-    host: 'genomic-cancer-medicine.unimelb.edu.au',
-  },
-];
+export const ORG_LINKS: OrgLink[] = [UMCCR_LINK, COLLABORATIVE_CENTRE_LINK];
 
 export const ORG = {
   shortName: 'UMCCR',

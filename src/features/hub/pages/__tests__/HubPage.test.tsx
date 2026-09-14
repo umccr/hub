@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { AuthContext, type AuthContextValue } from '@/context/auth-context';
 import { HubPage } from '../HubPage';
 import { CATALOG } from '../../data/catalog';
-import { ORG_LINKS } from '../../data/organisation';
+import { COLLABORATIVE_CENTRE, ORG, ORG_LINKS } from '../../data/organisation';
 
 // The header is shell state, not page content — stub the registration hook so
 // the page can render standalone.
@@ -56,12 +56,18 @@ describe('HubPage', () => {
     }
   });
 
-  it('surfaces both organisation links above the catalogue', () => {
+  it('carries both organisation links inline in the welcome copy', () => {
     const html = renderHub();
+    const intro = html.slice(0, html.indexOf('Search the catalogue'));
     for (const link of ORG_LINKS) {
-      expect(html).toContain(link.url);
-      expect(html).toContain(link.host);
+      expect(intro).toContain(`href="${link.url}"`);
     }
+  });
+
+  it('names the organisations rather than showing bare urls', () => {
+    const html = renderHub();
+    expect(html).toContain(ORG.name);
+    expect(html).toContain(COLLABORATIVE_CENTRE.name);
   });
 
   it('opens external destinations safely in a new tab', () => {
@@ -76,7 +82,12 @@ describe('HubPage', () => {
     expect(html).toContain('Local');
   });
 
-  it('links through to the fuller organisation overview', () => {
-    expect(renderHub()).toContain('href="/about"');
+  it('marks which deployment an API reference points at', () => {
+    const html = renderHub();
+    // The catalogue mixes dev and prod hosts, so the distinction has to be visible.
+    expect(CATALOG.some((e) => e.env === 'dev')).toBe(true);
+    expect(CATALOG.some((e) => e.env === 'prod')).toBe(true);
+    expect(html).toContain('>dev<');
+    expect(html).toContain('>prod<');
   });
 });

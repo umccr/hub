@@ -62,7 +62,7 @@ describe('collapsed navigation tooltips', () => {
     expect(markup).toContain('data-side="right"');
     expect(markup).toContain('data-show-arrow="false"');
     expect(markup).toContain('>Hub</span>');
-    expect(markup).toContain('>Organisation</span>');
+    expect(markup).toContain('>About us</span>');
   });
 
   it('renders secondary sidebar item labels as right-side tooltips when collapsed', () => {
