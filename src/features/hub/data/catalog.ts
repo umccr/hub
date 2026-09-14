@@ -220,6 +220,16 @@ export const CATALOG: CatalogEntry[] = [
   },
 
   // --- Projects -------------------------------------------------------------
+
+  {
+    id: 'github-dashboard',
+    name: 'GitHub Dashboard',
+    description: 'Browse and monitor the organisation’s repositories.',
+    kind: 'project',
+    url: 'https://umccr.github.io/github-portfolio-dashboard/',
+    initials: 'GH',
+    accent: 'bg-slate-800',
+  },
   {
     id: 'orcabus-github',
     name: 'OrcaBus on GitHub',
@@ -229,15 +239,6 @@ export const CATALOG: CatalogEntry[] = [
     section: 'orcabus',
     initials: 'OB',
     accent: 'bg-slate-700',
-  },
-  {
-    id: 'github-dashboard',
-    name: 'GitHub Dashboard',
-    description: 'Browse and monitor the organisation’s repositories.',
-    kind: 'project',
-    url: 'https://umccr.github.io/github-portfolio-dashboard/',
-    initials: 'GH',
-    accent: 'bg-slate-800',
   },
   {
     id: 'umccr-github',
@@ -251,13 +252,14 @@ export const CATALOG: CatalogEntry[] = [
 
   // --- Docs -----------------------------------------------------------------
   {
-    id: 'guardians-docs',
-    name: 'Guardians',
-    description: 'Documentation for the Guardians project.',
+    id: 'orcahouse-docs',
+    name: 'OrcaHouse Docs',
+    description: 'Documentation for the OrcaHouse project.',
     kind: 'docs',
-    url: 'https://umccr.github.io/guardians-doc/',
-    initials: 'GD',
-    accent: 'bg-purple-600',
+    url: 'https://umccr.github.io/orcahouse-doc/',
+    section: 'orcahouse',
+    initials: 'OV',
+    accent: 'bg-orange-500',
   },
   {
     id: 'orcahouse-dbt-docs',
@@ -270,14 +272,13 @@ export const CATALOG: CatalogEntry[] = [
     accent: 'bg-orange-600',
   },
   {
-    id: 'orcavault-docs',
-    name: 'OrcaVault',
-    description: 'dbt documentation for the OrcaVault models.',
+    id: 'guardians-docs',
+    name: 'Guardians Docs',
+    description: 'Documentation for the Guardians project.',
     kind: 'docs',
-    url: 'https://umccr.github.io/orcahouse-doc/dbt/orcavault/#!/overview',
-    section: 'orcahouse',
-    initials: 'OV',
-    accent: 'bg-orange-500',
+    url: 'https://umccr.github.io/guardians-doc/',
+    initials: 'GD',
+    accent: 'bg-purple-600',
   },
 
   // --- API references -------------------------------------------------------
@@ -346,10 +347,7 @@ export const CATALOG: CatalogEntry[] = [
     name: 'Deploy Status API',
     description: 'Deployment state behind Deployment Pulse.',
     kind: 'api',
-    // Pinned to prod, not `{env}`: this is the only service supplied as a prod
-    // URL, which reads as "it only runs there". Switch it to `{env}` if a dev
-    // deployment exists.
-    url: 'https://deploy-status.prod.umccr.org/schema/swagger-ui#/',
+    url: 'https://deploy-status.{env}.umccr.org/schema/swagger-ui#/',
     section: 'orcabus',
     initials: 'DS',
     accent: 'bg-emerald-600',
