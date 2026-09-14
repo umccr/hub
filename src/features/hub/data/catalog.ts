@@ -231,14 +231,13 @@ export const CATALOG: CatalogEntry[] = [
     accent: 'bg-slate-700',
   },
   {
-    id: 'github-explorer',
-    name: 'GitHub Explorer',
+    id: 'github-dashboard',
+    name: 'GitHub Dashboard',
     description: 'Browse and monitor the organisation’s repositories.',
     kind: 'project',
-    url: 'http://localhost:5173/',
-    initials: 'GX',
+    url: 'https://umccr.github.io/github-portfolio-dashboard/',
+    initials: 'GH',
     accent: 'bg-slate-800',
-    local: true,
   },
   {
     id: 'umccr-github',

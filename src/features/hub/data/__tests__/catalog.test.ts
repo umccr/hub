@@ -182,10 +182,13 @@ describe('catalogue sections', () => {
     expect(byId('orcabus-github')?.url).toBe('https://github.com/OrcaBus');
   });
 
-  it('files GitHub Explorer under projects', () => {
-    const gh = CATALOG.find((e) => e.id === 'github-explorer');
-    expect(gh?.name).toBe('GitHub Explorer');
+  it('files GitHub Dashboard under projects, on its published site', () => {
+    const gh = CATALOG.find((e) => e.id === 'github-dashboard');
+    expect(gh?.name).toBe('GitHub Dashboard');
     expect(gh?.kind).toBe('project');
+    expect(gh?.url).toBe('https://umccr.github.io/github-portfolio-dashboard/');
+    // It is deployed now, so it must not still be flagged as developer-only.
+    expect(gh?.local).toBeUndefined();
   });
 
   it('gives every declared section at least one entry', () => {

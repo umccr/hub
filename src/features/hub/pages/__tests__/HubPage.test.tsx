@@ -109,11 +109,10 @@ describe('HubPage', () => {
     expect(renderHub({}, 'local')).toContain('workflow.dev.umccr.org');
   });
 
-  it('links to each platform section', () => {
+  it('leaves section navigation to the sidebar rather than repeating it as cards', () => {
     const html = renderHub();
     for (const section of CATALOG_SECTIONS) {
-      expect(html).toContain(`href="${section.path}"`);
-      expect(html).toContain(section.label);
+      expect(html).not.toContain(`href="${section.path}"`);
     }
   });
 });
