@@ -66,11 +66,6 @@ export function HubPage() {
           <OrgAnchor link={COLLABORATIVE_CENTRE_LINK}>{COLLABORATIVE_CENTRE.name}</OrgAnchor>,{' '}
           {COLLABORATIVE_CENTRE.partnership}.
         </p>
-        <p className='text-muted-foreground mt-2 max-w-3xl text-sm leading-relaxed'>
-          {ORG.shortName} works to {ORG.purpose}. This Hub is the way in to the systems behind that
-          work — lab metadata, sequencing runs, pipelines and the data they produce. Everything
-          opens in a new tab.
-        </p>
       </header>
 
       {/* Catalogue controls */}
