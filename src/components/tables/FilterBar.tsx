@@ -1,0 +1,126 @@
+import type { ReactNode } from 'react';
+import { Search, X } from 'lucide-react';
+import { PillTag } from '../ui/PillTag';
+import { Input } from '../ui/Input';
+import { useDebouncedSearchInput } from '@/hooks/useDebouncedSearchInput';
+
+function formatBadgeDisplay(badge: FilterBadge): string {
+  const valueStr = Array.isArray(badge.value)
+    ? badge.value.filter(Boolean).join(', ')
+    : String(badge.value ?? '');
+  return valueStr ? `${badge.label}: ${valueStr}` : badge.label;
+}
+
+/** Badge type drives PillTag variant: search → neutral, others → blue. */
+export interface FilterBadge {
+  id: string;
+  type: 'search' | 'range' | 'filter';
+  label: string;
+  value: string | string[];
+  onRemove: () => void;
+}
+
+interface FilterBarProps {
+  searchValue: string;
+  onSearchChange: (value: string) => void;
+  /** Debounce delay for search input in ms. Default 400. */
+  searchDebounceMs?: number;
+  searchPlaceholder?: string;
+  filters?: ReactNode;
+  actions?: ReactNode;
+  showBadgesSection?: boolean;
+  activeFilterBadges?: FilterBadge[];
+  onClearAll?: () => void;
+  searchLabel?: string;
+  searchId?: string;
+}
+
+export function FilterBar({
+  searchValue,
+  onSearchChange,
+  searchDebounceMs = 400,
+  searchPlaceholder = 'Search...',
+  filters,
+  actions,
+  showBadgesSection = true,
+  activeFilterBadges,
+  onClearAll,
+  searchLabel = 'Search',
+  searchId = 'filter-bar-search',
+}: FilterBarProps) {
+  const { inputRef, handleInputChange, resetInput, clearInput } = useDebouncedSearchInput({
+    value: searchValue,
+    onChange: onSearchChange,
+    delayMs: searchDebounceMs,
+  });
+
+  const handleClearAll = () => {
+    if (onClearAll) {
+      resetInput('');
+      onClearAll();
+    } else {
+      clearInput();
+    }
+  };
+
+  return (
+    <div className='my-3 rounded-lg border border-neutral-200 bg-white dark:border-[#2d3540] dark:bg-[#111418]'>
+      <div className='flex items-center gap-2 p-2.5'>
+        <div className='relative flex-1'>
+          <label htmlFor={searchId} className='sr-only'>
+            {searchLabel}
+          </label>
+          <Search
+            className='absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-neutral-400 dark:text-[#9dabb9]'
+            aria-hidden='true'
+          />
+          <Input
+            ref={inputRef}
+            id={searchId}
+            type='text'
+            defaultValue={searchValue}
+            onChange={handleInputChange}
+            placeholder={searchPlaceholder}
+            className='peer h-9 bg-neutral-50 pr-9 pl-9 text-sm dark:border-[#2d3540] dark:bg-[#1e252e] dark:text-slate-100 dark:placeholder-[#9dabb9]'
+          />
+          <button
+            type='button'
+            onClick={clearInput}
+            className='absolute top-1/2 right-3 -translate-y-1/2 text-neutral-400 peer-placeholder-shown:hidden hover:text-neutral-600 dark:text-[#9dabb9] dark:hover:text-white'
+            aria-label='Clear search'
+          >
+            <X className='h-4 w-4' aria-hidden='true' />
+          </button>
+        </div>
+        {filters && <div className='flex items-center gap-2'>{filters}</div>}
+        {actions && <div className='flex items-center gap-2'>{actions}</div>}
+      </div>
+
+      {showBadgesSection && activeFilterBadges && activeFilterBadges.length > 0 && (
+        <div className='flex flex-wrap items-center gap-2 border-t border-slate-200 bg-slate-50 px-3 py-2 dark:border-[#2d3540] dark:bg-[#1e252e]/50'>
+          <span className='mr-1 shrink-0 text-xs font-semibold tracking-wide text-slate-500 uppercase dark:text-[#9dabb9]'>
+            Active:
+          </span>
+          {activeFilterBadges?.map((badge) => (
+            <PillTag
+              key={badge.id}
+              variant={badge.type === 'search' ? 'neutral' : 'blue'}
+              onRemove={badge.onRemove}
+            >
+              {formatBadgeDisplay(badge)}
+            </PillTag>
+          ))}
+          {(activeFilterBadges?.length ?? 0) > 0 && onClearAll && (
+            <button
+              type='button'
+              onClick={handleClearAll}
+              className='ml-auto shrink-0 text-xs font-medium text-blue-600 hover:text-blue-800 dark:text-[#137fec] dark:hover:text-blue-300'
+            >
+              Clear all
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
