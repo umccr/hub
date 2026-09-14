@@ -1,5 +1,11 @@
 import { useLocation } from 'react-router';
-import { LayoutGrid, PanelLeftClose, PanelLeftOpen, type LucideIcon } from 'lucide-react';
+import {
+  Building2,
+  LayoutGrid,
+  PanelLeftClose,
+  PanelLeftOpen,
+  type LucideIcon,
+} from 'lucide-react';
 import { SidebarNavLink } from './SidebarNavLink';
 import { useAppShell } from '../../context/app-shell-context';
 
@@ -10,7 +16,10 @@ interface PrimaryNavItem {
   sublabel?: string;
 }
 
-const navItems: PrimaryNavItem[] = [{ path: '/', label: 'My Apps', icon: LayoutGrid }];
+const navItems: PrimaryNavItem[] = [
+  { path: '/', label: 'Hub', icon: LayoutGrid },
+  { path: '/about', label: 'Organisation', icon: Building2 },
+];
 
 function isNavItemActive(pathname: string, path: string) {
   if (path === '/') return pathname === '/';

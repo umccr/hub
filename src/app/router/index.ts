@@ -11,6 +11,10 @@ const HubPage = lazy(() =>
   import('@/features/hub/pages/HubPage').then((m) => ({ default: m.HubPage }))
 );
 
+const AboutPage = lazy(() =>
+  import('@/features/hub/pages/AboutPage').then((m) => ({ default: m.AboutPage }))
+);
+
 const NotFoundPage = lazy(() =>
   import('@/features/errors/pages/NotFoundPage').then((m) => ({ default: m.NotFoundPage }))
 );
@@ -31,7 +35,12 @@ export const router = createBrowserRouter(
             {
               index: true,
               Component: HubPage,
-              errorElement: createElement(RouteErrorFallbackPage, { featureName: 'My Apps' }),
+              errorElement: createElement(RouteErrorFallbackPage, { featureName: 'Hub' }),
+            },
+            {
+              path: 'about',
+              Component: AboutPage,
+              errorElement: createElement(RouteErrorFallbackPage, { featureName: 'Organisation' }),
             },
             ...routeRegistry,
           ],
