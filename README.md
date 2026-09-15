@@ -68,11 +68,19 @@ make install
 Start Front-end Development Server
 
 ```sh
-make start
+make start          # http://localhost:3000/hub/
+make start PORT=3001   # if 3000 is taken
 ```
 
 `make start` sources `start.sh`, which pulls Cognito config from AWS SSM — you
 need an active AWS session (`aws sso login --profile dev && export AWS_PROFILE=dev`).
+
+### Base path
+
+The app is served under `/hub/`, not at the domain root —
+`https://portal.umccr.org/hub/` deployed, `http://localhost:3000/hub/` in dev.
+It is set once as Vite's `base` in `vite.config.ts`; the router reads it back
+through `import.meta.env.BASE_URL`, so there is no second copy to keep in step.
 
 ### Checks
 
@@ -88,3 +96,6 @@ make test    # vitest
 ```sh
 make deploy-dev DEPLOY_BUCKET=orcaui-v2-cloudfront-<account-id>
 ```
+
+It uploads to the `hub/` prefix (`DEPLOY_PREFIX`), matching the `/hub/` base
+path above.

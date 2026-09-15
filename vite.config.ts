@@ -42,7 +42,6 @@ export default defineConfig({
               name: 'data-fetch',
               test: /node_modules\/(@tanstack\/react-query|openapi-)/,
             },
-            { name: 'xyflow', test: /node_modules\/@xyflow/ },
             { name: 'headlessui', test: /node_modules\/@headlessui/ },
             { name: 'icons', test: /node_modules\/lucide-react/ },
             { name: 'react-router', test: /node_modules\/react-router/ },
@@ -60,16 +59,17 @@ export default defineConfig({
     },
   },
   server: {
-    port: 3001,
+    port: 3000,
     strictPort: true,
     open: true,
   },
   preview: {
-    port: 3001,
+    port: 3000,
   },
   test: {
     exclude: [...configDefaults.exclude, '**/.pnpm-store/**', '**/.worktrees/**'],
   },
-  // App is served under /v2/ in deployed environments.
-  base: '/v2/',
+  // Served under /hub/ everywhere — https://portal.umccr.org/hub/ when deployed,
+  // http://localhost:3000/hub/ in dev. The router reads this back via BASE_URL.
+  base: '/hub/',
 });

@@ -1,13 +1,14 @@
 .PHONY: *
 
-# Dev server port (Vite). Override when 3001 is in use, e.g. `make start PORT=3000` or `make start-3000`.
-PORT ?= 3001
+# Dev server port (Vite). The app serves at http://localhost:$(PORT)/hub/.
+# Override when 3000 is in use, e.g. `make start PORT=3001` or `make start-3001`.
+PORT ?= 3000
 export PORT
 
 # Deploy target. Contains an AWS account ID, so it is not committed: set it in your
 # shell or CI, e.g. `make deploy-dev DEPLOY_BUCKET=orcaui-v2-cloudfront-<account-id>`.
 DEPLOY_BUCKET ?=
-DEPLOY_PREFIX ?= v2/
+DEPLOY_PREFIX ?= hub/
 DEPLOY_ENV_LAMBDA ?= CodeBuildEnvConfigLambdaBeta
 
 start: 

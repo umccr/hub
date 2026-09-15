@@ -94,12 +94,15 @@ describe('HubPage', () => {
     expect(html).toContain('Local');
   });
 
-  it('marks which deployment each environment-bound entry reaches', () => {
-    // The catalogue mixes environment-bound and prod-pinned hosts, so the
-    // distinction has to be visible on the tile.
-    const html = renderHub();
-    expect(html).toContain('>dev<');
-    expect(html).toContain('>prod<');
+  it('tags environment-bound entries with the environment being reached', () => {
+    // Every environment-bound host now follows the Hub, so the badges agree
+    // with each other — a stray tag from another deployment would be a bug.
+    expect(renderHub()).toContain('>dev<');
+    expect(renderHub()).not.toContain('>prod<');
+
+    const prod = renderHub({}, 'prod');
+    expect(prod).toContain('>prod<');
+    expect(prod).not.toContain('>dev<');
   });
 
   it('follows the environment the Hub is running in', () => {

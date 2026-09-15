@@ -47,25 +47,25 @@ describe('ENVIRONMENT_HOSTNAMES', () => {
 });
 
 describe('buildEnvironmentUrl', () => {
-  it('swaps only the hostname, preserving path (incl. /v2/), query and hash', () => {
-    const current = 'https://portal.dev.umccr.org/v2/files?bucket=test-data&page=2';
+  it('swaps only the hostname, preserving path (incl. /hub/), query and hash', () => {
+    const current = 'https://portal.dev.umccr.org/hub/files?bucket=test-data&page=2';
     expect(buildEnvironmentUrl('stg', current)).toBe(
-      'https://portal.stg.umccr.org/v2/files?bucket=test-data&page=2'
+      'https://portal.stg.umccr.org/hub/files?bucket=test-data&page=2'
     );
     expect(buildEnvironmentUrl('prod', current)).toBe(
-      'https://portal.umccr.org/v2/files?bucket=test-data&page=2'
+      'https://portal.umccr.org/hub/files?bucket=test-data&page=2'
     );
   });
 
   it('preserves the hash fragment', () => {
-    expect(buildEnvironmentUrl('dev', 'https://portal.stg.umccr.org/v2/runs#overview')).toBe(
-      'https://portal.dev.umccr.org/v2/runs#overview'
+    expect(buildEnvironmentUrl('dev', 'https://portal.stg.umccr.org/hub/runs#overview')).toBe(
+      'https://portal.dev.umccr.org/hub/runs#overview'
     );
   });
 
   it('upgrades the local dev server to https on the default port', () => {
-    expect(buildEnvironmentUrl('stg', 'http://localhost:3000/v2/files?bucket=test-data')).toBe(
-      'https://portal.stg.umccr.org/v2/files?bucket=test-data'
+    expect(buildEnvironmentUrl('stg', 'http://localhost:3000/hub/files?bucket=test-data')).toBe(
+      'https://portal.stg.umccr.org/hub/files?bucket=test-data'
     );
   });
 

@@ -62,5 +62,6 @@ export const router = createBrowserRouter(
     // Catch-all — unknown routes
     { path: '*', Component: NotFoundPage },
   ],
-  { basename: '/v2/' }
+  // Single source of truth: Vite's `base` (see vite.config.ts).
+  { basename: import.meta.env.BASE_URL }
 );

@@ -5,7 +5,7 @@ import { LAST_VISITED_PAGE_STORAGE_KEY } from '@/utils/storage-keys';
 
 /**
  * Read/write access to the persisted last-visited page (router-relative
- * path + query + hash, without the `/v2/` basename). Returns the standard
+ * path + query + hash, without the `/hub/` basename). Returns the standard
  * useLocalStorage tuple `[value, setValue, remove]`.
  */
 export function useLastVisitedPage() {

@@ -37,7 +37,7 @@ export const ENVIRONMENT_HOSTNAMES: Record<DeployedEnvironment, string> = {
 
 /**
  * Build the URL of the current page on another environment's domain.
- * Path (incl. the `/v2/` base), query string and hash are preserved; the
+ * Path (incl. the `/hub/` base), query string and hash are preserved; the
  * hostname is swapped and the scheme is normalised to https on the default
  * port, so this also works from `http://localhost:3000`.
  *
