@@ -88,10 +88,12 @@ describe('HubPage', () => {
     expect(html).toContain('target="_blank"');
   });
 
-  it('flags entries that only resolve on a developer machine', () => {
+  it('shows the Local flag exactly when the catalogue has a local entry', () => {
+    // Not pinned to any specific entry being local — the catalogue is curated
+    // by hand and that can change. The card-level mechanism itself is covered
+    // by CatalogCard.test.tsx; this only checks the two stay in agreement.
     const html = renderHub();
-    expect(CATALOG.some((e) => e.local)).toBe(true);
-    expect(html).toContain('Local');
+    expect(html.includes('Local')).toBe(CATALOG.some((e) => e.local));
   });
 
   it('tags environment-bound entries with the environment being reached', () => {
