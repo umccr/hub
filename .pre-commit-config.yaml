@@ -5,6 +5,16 @@ repos:
       - id: check-added-large-files
         exclude: ^(pnpm-lock.yaml|public/assets/logo/uimlogo.png)
       - id: check-yaml
+        # pnpm 12's pinned self-managed `packageManager` writes pnpm-lock.yaml
+        # as two YAML documents (its own binary bookkeeping, then the real
+        # lockfile) — that's expected, not corruption, so only this file gets
+        # --multi; every other YAML file still fails on an accidental second
+        # document.
+        name: check-yaml (multi-doc lockfile)
+        files: ^pnpm-lock\.yaml$
+        args: ['--multi']
+      - id: check-yaml
+        exclude: ^pnpm-lock\.yaml$
       - id: detect-aws-credentials
         args: ['--allow-missing-credentials']
       - id: detect-private-key
