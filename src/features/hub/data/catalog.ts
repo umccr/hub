@@ -163,11 +163,10 @@ export const CATALOG: CatalogEntry[] = [
     name: 'OrcaHouse Mart',
     description: 'Consumer-facing tables of the OrcaHouse data warehouse.',
     kind: 'app',
-    url: 'http://localhost:3002/',
+    url: 'https://{portal}/orcahouse/',
     section: 'orcahouse',
     initials: 'OM',
     accent: 'bg-rose-500',
-    local: true,
   },
 
   // --- Tools ----------------------------------------------------------------
