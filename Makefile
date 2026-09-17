@@ -5,11 +5,12 @@
 PORT ?= 3000
 export PORT
 
-# Deploy target. Contains an AWS account ID, so it is not committed: set it in your
-# shell or CI, e.g. `make deploy-dev DEPLOY_BUCKET=orcaui-v2-cloudfront-<account-id>`.
-DEPLOY_BUCKET ?=
-DEPLOY_PREFIX ?= hub/
-DEPLOY_ENV_LAMBDA ?= CodeBuildEnvConfigLambdaBeta
+# Deployment is owned by umccr/frontend-infrastructure-pipelines: a push to main runs
+# HubAppCICDPipeline, which builds and deploys to dev, then prod behind a manual approval.
+# There is deliberately no deploy target here. A hand-rolled `aws s3 cp` would differ from the
+# pipeline in ways that are easy to miss and hard to debug: it would not prune the previous build,
+# would not set the Cache-Control headers that stop a deploy breaking an open session, and would
+# rewrite every portal app's env.js rather than only this app's.
 
 start: 
 	@pnpm run start
@@ -17,17 +18,6 @@ start:
 # Convenience: `make start-3001` is equivalent to `make start PORT=3001` (delegates to `start`, so OpenAPI runs once)
 start-%:
 	@$(MAKE) start PORT=$*
-
-deploy-dev:
-	@test -n "$(DEPLOY_BUCKET)" || { \
-	  echo "DEPLOY_BUCKET is not set. e.g. make deploy-dev DEPLOY_BUCKET=orcaui-v2-cloudfront-<account-id>"; \
-	  exit 1; \
-	}
-	@pnpm build
-	@aws s3 cp ./build s3://$(DEPLOY_BUCKET)/$(DEPLOY_PREFIX) --recursive
-	@aws lambda invoke \
-    --function-name $(DEPLOY_ENV_LAMBDA) \
-    response.json
 
 storybook:
 	@pnpm run storybook
