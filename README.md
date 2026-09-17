@@ -82,6 +82,17 @@ The app is served under `/hub/`, not at the domain root —
 It is set once as Vite's `base` in `vite.config.ts`; the router reads it back
 through `import.meta.env.BASE_URL`, so there is no second copy to keep in step.
 
+Two things follow from sharing a domain with the other portal apps:
+
+- **Reference `public/` assets through `BASE_URL`,** not with a leading slash. Vite rewrites URLs in
+  `index.html` but not string literals in TSX, and `/assets/x.png` resolves to the portal root, which
+  is a different app's bucket.
+- **The OAuth redirect is derived, not configured.** `src/app/config.ts` builds it from the current
+  origin plus `BASE_URL`, so sign-in returns here rather than to the portal home page, in every
+  environment. That exact URL must be registered on the Cognito app client; the `cognito_aai`
+  Terraform stack generates it from its `portal_app_paths` list. **Apply that stack before changing
+  the base path**, or the hosted UI rejects sign-in with `redirect_mismatch`.
+
 ### Checks
 
 ```sh
@@ -91,11 +102,16 @@ make test    # vitest
 
 ### Deploy
 
-`make deploy-dev` needs the target bucket, which is not committed:
+Deployment is owned by
+[umccr/frontend-infrastructure-pipelines](https://github.com/umccr/frontend-infrastructure-pipelines),
+not by this repository. A push to `main` runs `HubAppCICDPipeline`, which runs `pnpm build`, syncs
+`build/` to `s3://hub-cloudfront-<account>/hub/` and invokes the portal's config Lambda to write
+`env.js`. Dev deploys automatically; prod is behind a manual approval.
 
-```sh
-make deploy-dev DEPLOY_BUCKET=orcaui-v2-cloudfront-<account-id>
-```
+There is deliberately no `make deploy` target: a hand-rolled upload would not prune the previous
+build, would not set the `Cache-Control` headers that keep an open session working through a deploy,
+and would rewrite every portal app's `env.js` instead of only this one's.
 
-It uploads to the `hub/` prefix (`DEPLOY_PREFIX`), matching the `/hub/` base
-path above.
+Runtime configuration comes from `env.js`, written per environment by that Lambda, so one build is
+promoted from dev to prod unchanged. `public/env.js` is a local-development placeholder and is
+excluded from the upload.
