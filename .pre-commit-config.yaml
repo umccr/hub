@@ -1,0 +1,44 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-added-large-files
+        exclude: ^(pnpm-lock.yaml|public/assets/logo/uimlogo.png)
+      - id: check-yaml
+        # pnpm 12's pinned self-managed `packageManager` writes pnpm-lock.yaml
+        # as two YAML documents (its own binary bookkeeping, then the real
+        # lockfile) — that's expected, not corruption, so only this file gets
+        # --multi; every other YAML file still fails on an accidental second
+        # document.
+        name: check-yaml (multi-doc lockfile)
+        files: ^pnpm-lock\.yaml$
+        args: ['--multi']
+      - id: check-yaml
+        exclude: ^pnpm-lock\.yaml$
+      - id: detect-aws-credentials
+        args: ['--allow-missing-credentials']
+      - id: detect-private-key
+      # - id: no-commit-to-branch
+      #   args: [--branch, main, --branch, master, --pattern, release/.*]
+
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        name: detect secrets
+        args: ['--baseline', '.secrets.baseline']
+        exclude: ^(pnpm-lock.yaml)
+
+  - repo: https://github.com/pre-commit/mirrors-eslint
+    rev: v10.0.2
+    hooks:
+      - id: eslint
+        files: \.[jt]sx?$ # *.js, *.jsx, *.ts and *.tsx
+        types: [file]
+
+  - repo: local
+    hooks:
+      - id: prettier
+        name: prettier Format
+        entry: pnpm run prettier-fix
+        language: system
