@@ -111,7 +111,10 @@ export function SignInPage() {
         {/* Footer */}
         <div className='mt-8 flex flex-col items-center gap-3'>
           <img
-            src='/assets/logo/uomlogo.png'
+            // Vite rewrites asset URLs in index.html but not string literals in TSX, so the base
+            // path has to be applied here. Without it this resolves to the portal root, which is a
+            // different app's bucket. BASE_URL already ends in a slash.
+            src={`${import.meta.env.BASE_URL}assets/logo/uomlogo.png`}
             alt='University of Melbourne'
             className='h-8 opacity-60 brightness-200 grayscale transition-opacity hover:opacity-80'
           />
